@@ -93,8 +93,8 @@ publishing {
         create<MavenPublication>("library") {
             groupId = "com.moataz.core.network"
             artifactId = "presentation"
-            version = "1.0.0"
-            artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
+            version = "1.0.1"
+            artifact("${layout.buildDirectory.get()}/outputs/aar/${artifactId}-release.aar")
         }
     }
 
