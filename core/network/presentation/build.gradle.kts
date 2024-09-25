@@ -80,20 +80,18 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 }
-
-// Task to generate sources JAR
-tasks.register<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
-}
+// Accessing properties set in the root build.gradle.kts
+val libraryGroupId: String by project
+val libraryReleaseVersion: String by project
 
 // Publishing configuration
 publishing {
-    publications {
+    publications{
+        val libraryArtifactId = "presentation"
         create<MavenPublication>("library") {
-            groupId = "com.moataz.core.network"
-            artifactId = "presentation"
-            version = "1.0.1"
+            groupId = libraryGroupId
+            artifactId = libraryArtifactId
+            version = libraryReleaseVersion
             artifact("${layout.buildDirectory.get()}/outputs/aar/${artifactId}-release.aar")
         }
     }
