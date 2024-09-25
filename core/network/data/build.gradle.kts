@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.dagger.hilt.android)
+    id("maven-publish")
 }
 
 android {
@@ -76,4 +77,32 @@ dependencies {
 //Import Retrofit dependencies
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+}
+
+// Accessing properties set in the root build.gradle.kts
+val libraryGroupId: String by project
+val libraryReleaseVersion: String by project
+
+// Publishing configuration
+publishing {
+    publications{
+        val libraryArtifactId = "data"
+        create<MavenPublication>("library") {
+            groupId = libraryGroupId
+            artifactId = libraryArtifactId
+            version = libraryReleaseVersion
+            artifact("${layout.buildDirectory.get()}/outputs/aar/${artifactId}-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/moatazhamada/bug-it-core")
+            credentials {
+                username = System.getenv("USER") ?: ""
+                password = System.getenv("TOKEN") ?: ""
+            }
+        }
+    }
 }
