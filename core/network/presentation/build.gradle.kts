@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.dagger.hilt.android)
+    id("maven-publish")
 }
 
 android {
@@ -78,4 +79,39 @@ dependencies {
 //Import Retrofit dependencies
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+}
+
+// Task to generate sources JAR
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(android.sourceSets["main"].java.srcDirs)
+}
+
+// Publishing configuration
+publishing {
+    publications {
+        create<MavenPublication>("library") {
+            from(components["release"])
+
+            groupId = "com.moataz.core.network"
+            artifactId = "presentation"    // Specific artifact ID for this module
+            version = "1.0.0"
+
+            // Adds the sources JAR to the publication
+            artifact(tasks["sourcesJar"]) {
+                classifier = "sources"
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/moatazhamada/bug-it-core")
+            credentials {
+                username = System.getenv("USER") ?: ""
+                password = System.getenv("TOKEN") ?: ""
+            }
+        }
+    }
 }

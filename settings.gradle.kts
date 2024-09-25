@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Bug it"
+rootProject.name = "Bug it Core"
 include(":core:network")
 include(":core:network:data")
 include(":core:network:domain")
