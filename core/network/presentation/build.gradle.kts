@@ -91,16 +91,10 @@ tasks.register<Jar>("sourcesJar") {
 publishing {
     publications {
         create<MavenPublication>("library") {
-            from(components["release"])
-
             groupId = "com.moataz.core.network"
-            artifactId = "presentation"    // Specific artifact ID for this module
+            artifactId = "presentation"
             version = "1.0.0"
-
-            // Adds the sources JAR to the publication
-            artifact(tasks["sourcesJar"]) {
-                classifier = "sources"
-            }
+            artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
         }
     }
 
